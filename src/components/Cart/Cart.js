@@ -19,9 +19,9 @@ const DUMMY_ITEMS = [
 
 const Cart = (props) => {
   const cartItems = (
-    <ul>
+    <ul className={classes['cart-items']}>
       {DUMMY_ITEMS.map((item) => (
-        <li>item.name</li>
+        <li>{item.name}</li>
       ))}
     </ul>
   );
@@ -32,7 +32,7 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>$62.44</span>
       </div>
-      <div className={classes.action}>
+      <div className={classes.actions}>
         <button className={classes['button--alt']}>Close</button>
         <button className={classes.button}>Order</button>
       </div>
