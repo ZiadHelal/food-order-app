@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import Modal from '../UI/Modal';
 import CartItem from './CartItem';
@@ -34,6 +34,20 @@ const Cart = (props) => {
       ))}
     </ul>
   );
+
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        props.onRemove();
+      }
+    };
+    document.addEventListener('keydown', keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  });
+
   return (
     <Modal onRemove={props.onRemove}>
       {cartItems}
