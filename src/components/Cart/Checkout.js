@@ -19,6 +19,9 @@ const Checkout = (props) => {
         <label htmlFor='city'>City</label>
         <input id='city' type='text'></input>
       </div>
+      <button type='button' onClick={props.onCancel}>
+        Cancel
+      </button>
       <button>Confirm</button>
     </form>
   );

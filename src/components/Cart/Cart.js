@@ -54,6 +54,19 @@ const Cart = (props) => {
     setCheckOut(true);
   };
 
+  const modalActions = (
+    <div className={classes.actions}>
+      <button className={classes['button--alt']} onClick={props.onRemove}>
+        Close
+      </button>
+      {hasItems && (
+        <button className={classes.button} onClick={orderHandler}>
+          Order
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <Modal onRemove={props.onRemove}>
       {cartItems}
@@ -62,16 +75,7 @@ const Cart = (props) => {
         <span>{totalAmount}</span>
       </div>
       {checkOut && <Checkout />}
-      <div className={classes.actions}>
-        <button className={classes['button--alt']} onClick={props.onRemove}>
-          Close
-        </button>
-        {hasItems && (
-          <button className={classes.button} onClick={orderHandler}>
-            Order
-          </button>
-        )}
-      </div>
+      {!checkOut && modalActions}
     </Modal>
   );
 };
