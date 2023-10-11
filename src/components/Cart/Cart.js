@@ -1,12 +1,14 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import Modal from '../UI/Modal';
 import CartItem from './CartItem';
+import Checkout from './Checkout';
 import CartContext from '../../store/cart-context';
 
 import classes from './Cart.module.css';
 
 const Cart = (props) => {
+  const [checkOut, setCheckOut] = useState(false);
   const cartCtx = useContext(CartContext);
 
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -48,6 +50,10 @@ const Cart = (props) => {
     };
   });
 
+  const orderHandler = () => {
+    setCheckOut(true);
+  };
+
   return (
     <Modal onRemove={props.onRemove}>
       {cartItems}
@@ -55,11 +61,16 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
+      {checkOut && <Checkout />}
       <div className={classes.actions}>
         <button className={classes['button--alt']} onClick={props.onRemove}>
           Close
         </button>
-        {hasItems && <button className={classes.button}>Order</button>}
+        {hasItems && (
+          <button className={classes.button} onClick={orderHandler}>
+            Order
+          </button>
+        )}
       </div>
     </Modal>
   );
