@@ -8,6 +8,8 @@ import CartContext from '../../store/cart-context';
 import classes from './Cart.module.css';
 
 const Cart = (props) => {
+  const [isSumbitting, setIsSubmitting] = useState(false);
+  const [isSumbitted, setIsSubmitted] = useState(false);
   const [checkOut, setCheckOut] = useState(false);
   const cartCtx = useContext(CartContext);
 
@@ -54,14 +56,21 @@ const Cart = (props) => {
     setCheckOut(true);
   };
 
-  const submitOrder = (userData) => {
-    fetch('https://react-http-9525e-default-rtdb.firebaseio.com/orders.json', {
-      method: 'POST',
-      body: JSON.stringify({
-        user: userData,
-        orderedItems: cartCtx.items,
-      }),
-    });
+  const submitOrder = async (userData) => {
+    setIsSubmitting(true);
+    const response = await fetch(
+      'https://react-http-9525e-default-rtdb.firebaseio.com/orders.json',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          user: userData,
+          orderedItems: cartCtx.items,
+        }),
+      }
+    );
+    setIsSubmitting(false);
+    setIsSubmitted(true);
+    cartCtx.clearCart();
   };
 
   const modalActions = (
@@ -77,8 +86,8 @@ const Cart = (props) => {
     </div>
   );
 
-  return (
-    <Modal onRemove={props.onRemove}>
+  const cardModalContent = (
+    <>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount</span>
@@ -88,6 +97,16 @@ const Cart = (props) => {
         <Checkout onConfirm={submitOrder} onCancel={props.onRemove} />
       )}
       {!checkOut && modalActions}
+    </>
+  );
+
+  const isSumbittingModalContent = <p>Sending order data...</p>;
+  const isSumbittedModalContent = <p>Successfully sent the order!</p>;
+  return (
+    <Modal onRemove={props.onRemove}>
+      {!isSumbitting && !isSumbitted && cardModalContent}
+      {isSumbitting && isSumbittingModalContent}
+      {isSumbitted && isSumbittedModalContent}
     </Modal>
   );
 };
