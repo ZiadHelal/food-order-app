@@ -54,6 +54,16 @@ const Cart = (props) => {
     setCheckOut(true);
   };
 
+  const submitOrder = (userData) => {
+    fetch('https://react-http-9525e-default-rtdb.firebaseio.com/orders.json', {
+      method: 'POST',
+      body: JSON.stringify({
+        user: userData,
+        orderedItems: cartCtx.items,
+      }),
+    });
+  };
+
   const modalActions = (
     <div className={classes.actions}>
       <button className={classes['button--alt']} onClick={props.onRemove}>
@@ -74,7 +84,9 @@ const Cart = (props) => {
         <span>Total Amount</span>
         <span>{totalAmount}</span>
       </div>
-      {checkOut && <Checkout onCancel={props.onRemove} />}
+      {checkOut && (
+        <Checkout onConfirm={submitOrder} onCancel={props.onRemove} />
+      )}
       {!checkOut && modalActions}
     </Modal>
   );
